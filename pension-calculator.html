@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>기초연금 계산기</title>
+</head>
+<body style="font-family: sans-serif; padding: 20px;">
+  <h2>💰 기초연금 금융재산 계산기</h2>
+  <p>※ 금융재산(예금, 적금 등)을 기준으로 계산됩니다.</p>
+
+  <label for="assetInput">보유 금융재산 (원):</label><br/>
+  <input type="number" id="assetInput" placeholder="예: 90000000" style="width: 200px; padding: 5px; margin: 10px 0;"><br/>
+  <button onclick="calculatePension()" style="padding: 5px 10px;">계산하기</button>
+
+  <div id="result" style="margin-top: 20px; font-weight: bold;"></div>
+
+  <script>
+    function calculatePension() {
+      let asset = parseFloat(document.getElementById('assetInput').value);
+      let resultText = "";
+      if (isNaN(asset) || asset <= 20000000) {
+        resultText = "💡 기초연금 100% 수령 가능 (재산이 기본공제 이하)";
+      } else {
+        let adjustedAsset = asset - 20000000;
+        let monthlyRecognizedIncome = (adjustedAsset * 0.04) / 12;
+        resultText = `📌 월 소득인정액: 약 ${Math.round(monthlyRecognizedIncome).toLocaleString()}원`;
+
+        if (monthlyRecognizedIncome > 1937490) {
+          resultText += "<br/>⚠️ 일부 감액 가능성 있음 (단독가구 기준 초과)";
+        } else {
+          resultText += "<br/>✅ 기초연금 100% 수령 가능 (단독가구 기준)";
+        }
+      }
+      document.getElementById('result').innerHTML = resultText;
+    }
+  </script>
+</body>
+</html>
